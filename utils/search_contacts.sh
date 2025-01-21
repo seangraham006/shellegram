@@ -1,9 +1,13 @@
 #! /bin/bash 
 myfile="contacts"
+temp="tempdata"
 search_contacts() 
 {
-        read -p "Choose to search either by name (1) or number (2) : " choice
-        case $choice in
+	suppress="false"
+	[ $# -gt 0 ] && [[ "$1" == "s" ]] && suppress="true"
+	[[ "$suppress" == "false" ]] && read -p "Choose to search either by name (1) or number (2) : " choice || choice=2 
+	
+	case $choice in
                 1)
                         read -p "Enter the name of the contact you are searching for : " contactname
                         if grep -i -q "^$contactname," "$myfile"; then
@@ -15,11 +19,14 @@ search_contacts()
                         ;;
                 2)
                         read -p "Enter the number of the contact you are searching for : " number
-                        if grep -q ",$number$" "$myfile"; then
-                                echo "Contact found" 
-                                grep ",$number$" "$myfile"
+			contact_info=$(grep ",$number$" "$myfile")
+
+                        if [ -n "$contact_info" ]; then
+                                echo "Contact found: $contact_info"
+			        [[ "$suppress" == "true" ]] && echo "$contact_info" > "$temp"	
                         else
-                                echo "No contact found with contact number $number" 
+                                echo "No contact found with contact number $number"
+			       [[ "$suppress" == "true" ]] && [[ -f "$temp" ]] && rm "$temp"
                         fi
                         ;;
                 *)
