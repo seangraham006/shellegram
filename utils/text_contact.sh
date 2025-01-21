@@ -10,9 +10,10 @@ text_contact() {
 	recipient_name=$(echo "$recipient" | awk -F, '{ print $1 }')
 	recipient_number=$(echo "$recipient" | awk -F, '{ print $2 }')
 	recipient_file="./chats/$recipient_number"
-	! [ -f "$recipient_file" ] && { touch "$recipient_file"; echo -e "\nNo messages yet\n"; } || get_messages "$recipient_file" "$recipient_number" "$recipient_name"
+	! [ -f "$recipient_file" ] && { touch "$recipient_file"; echo -e "\nNo messages yet\n"; } || get_messages "$recipient_file" "$recipient_number" "$user" "$recipient_name"
 	read -p "Enter your message: " message
-	! [ -z "$message" ] && echo "$user:$message" >> "$recipient_file"
+	#1 is for user 2 is for others
+	! [ -z "$message" ] && echo "1:$message" >> "$recipient_file"
 	echo
-	get_messages "$recipient_file" "$recipient_number" "$recipient_name"
+	get_messages "$recipient_file" "$recipient_number" "$user" "$recipient_name"
 }
