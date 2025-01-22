@@ -11,7 +11,6 @@ view_messages() {
 	username=$(echo "$user" | awk -F, '{print $1}')
         usernumber=$(echo "$user" | awk -F, '{print $2}')
         [ -z "$username" ] && user_identifier="$usernumber" || user_identifier="$username"
-	echo "ui: $user_identifier"
 
 	ls -t "$folder" | head -n 5 | while read -r file; do
 		contact_info=$(grep ",$file$" "contacts")
